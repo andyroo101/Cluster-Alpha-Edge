@@ -1,0 +1,48 @@
+diff -r 4165bdaf4983 operators/clusterOps.cpp
+--- a/operators/clusterOps.cpp	Fri May 04 15:24:04 2018 +0100
++++ b/operators/clusterOps.cpp	Fri Aug 02 14:41:40 2019 +0100
+@@ -1495,7 +1495,7 @@
+ {
+ 
+ 	if(statsPerCluster)
+-		s << "X\tY\tZ\t" ;
++		s << "X\tY\tZ\tXmin\tYmin\tZmin\tXmax\tYmax\tZmax\t" ;
+ 
+ 	for(size_t uj=0;uj<rangeFile.getNumIons();uj++)
+ 		s << rangeFile.getName(uj) << "\t";
+@@ -1553,6 +1553,35 @@
+ 
+ 
+ 			s << mean[0] << "\t" << mean[1] << "\t"  << mean[2] << "\t";
++			
++			//Compute Bounding Box
++			//---
++			
++			Point3D pmin, pmax, ptemp;
++			if(clusteredData[ui].size())
++			{
++				pmin = data[clusteredData[ui][0]].getPos();
++				pmax = data[clusteredData[ui][0]].getPos();
++				
++				for(size_t uj=0;uj<clusteredData[ui].size();uj++){
++					
++					ptemp=data[clusteredData[ui][uj]].getPos();
++					
++					for(size_t uk=0; uk<3; uk++){
++						
++						if (ptemp[uk]<pmin[uk])
++							pmin[uk] = ptemp[uk];
++						
++						if (ptemp[uk]>pmax[uk])
++							pmax[uk] = ptemp[uk];
++					}
++				}
++			}
++			
++			s << pmin[0] << "\t" << pmin[1] << "\t"  << pmin[2] << "\t";
++			s << pmax[0] << "\t" << pmax[1] << "\t"  << pmax[2] << "\t";
++			//---
++			
+ 
+ 			for(size_t uj=0;uj<ionCounts.size();uj++)
+ 				s << ionCounts[uj] << "\t";
