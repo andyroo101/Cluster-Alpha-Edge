@@ -1,5 +1,5 @@
 # Cluster Alpha Edge
-Edge detection of clusters for point-cloud data using an alpha-hull. Scripts written in R are used for the simulation of test data (see `edgeParticleSimulator.R` ) and finding the edge clusters from the associated cluster pos file results (see `findEdgeClusters.R`). The "full" pos file, cluster data or statistics (including the data required to get the cluster bounding box) as well as some settings (atomic density, detection efficiency and sampling fraction).
+Edge detection of clusters for point-cloud data using an alpha-hull. Scripts written in R are used for the simulation of test data (see `edgeParticleSimulator.R` ) and finding the edge clusters from the associated cluster pos file results (see `findEdgeClustersConvex.R`). The "full" pos file, cluster data or statistics (including the data required to get the cluster bounding box) as well as some settings (atomic density, detection efficiency and sampling fraction).
 
 # Required R libraries
 ```
@@ -20,33 +20,39 @@ Then you should be able to run any of the `edgeParticleSimulator` scripts which 
 
  
 # Experiments
-Different simulation experiments are identified by an id, a description of each can be found in the script ending in the id number, also below for reference:
-## id002
-`edgeParticleSimulator_coreShell_id002.R`
+Different simulation experiments are identified by an id, a description of each can be found in the script ending in the id number, also below in the reference table. Composition refers to the tables given below. All clusters had a radius of 2 nm and the core/shell particles had an inner core radius of 1.58 nm.
 
-1000 simulations.
+## Summary table of all experiments
+Summary of details in scripts `edgeParticleSimulator_id001.R` etc.
 
-20 core/shell particles in a 20 nm3 box, 1.58 core radius, 2 nm shell radius (4 nm total diameter) composition as follows:
+| Exp.  | Box    | Size (nm) | Core/shell? | Cluster edge method | Composition | Simulations |
+|-------|--------|-----------|-------------|---------------------|-------------|-------------|
+| id001 | Cube   | 20        | No          | Bounding box        | A           | 1000        |
+| id004 | Cube   | 20        | No          | Bounding box        | A           | 1000        |
+| id005 | Sphere | 40        | No          | Bounding box        | A           | 1000        |
+| id006 | Sphere | 40        | Yes         | Bounding box        | B           | 1000        |
+| id007 | Sphere | 40        | Yes         | Convex hull         | B           | 2000        |
+| id008 | Sphere | 40        | No          | Convex hull         | A           | 2000        |
 
-| Part | H    | C       | Fe    |
-|------|-----|--------|-----|
-| Core  | 99.9| 0.01  | 0  |
-| Shell | 0.01  | 99.9 | 0  |
-| Matrix  | 0.01  | 0.01  | 99.8  |
+## Compositions
+Particle compositions are either A or B for the clusters with no structure and the core/shell clusters respectively.
 
-## id004
-`edgeParticleSimulator_id004.R`
+### A Composition
+|   Part   |   H  |   C   |  Fe  |
+|----------|------|-------|------|
+| Particle |   50 |    50 |   0  |
+|  Matrix  | 0.01 |  0.01 | 99.8 |
 
-## id007
-`edgeParticleSimulator_id007.R`
-
-## id008
-`edgeParticleSimulator_id008.R`
-
+### B Composition
+|  Part  |   H  |   C  |  Fe  |
+|--------|------|------|------|
+| Core   | 99.9 | 0.01 |   0  |
+| Shell  | 0.01 | 99.9 |   0  |
+| Matrix | 0.01 | 0.01 | 99.8 |
 
 # Authors: 
-Andrew London
-Ben Jenkins
+* Andrew London
+* Ben Jenkins
 
 
 # License 
