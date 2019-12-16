@@ -9,13 +9,13 @@ Edge detection of clusters for point-cloud data using an alpha-hull. Scripts wri
 ```
 
 # Installation
-Copy or extract the contents of the repository into a local folder called “AlphaEdge”. The experiment scripts, detailed below, assume the [posgen exe](https://apttools.sourceforge.net) is available in one folder above the R scripts directory:
+Copy or extract the contents of the repository into a local folder called “ClusterAlphaEdge”. The experiment scripts, detailed below, assume the [posgen exe](https://apttools.sourceforge.net) is available in one folder above the R scripts directory:
 ```
 folder/
       ├── ClusterAlphaEdge
       ├── posgen
 ```
-The `findEdgeClustersConvex.R` script can use an unmodified version of posgen(https://apttools.sourceforge.net), however the `findEdgeClusters.R` script requires the bounding box of each cluster in the cluster statistics file produced by the cluster search step. A source code patch is available to add this functionality to posgen (`posgenBoundingBoxPatch.txt`). This will require the program to be (compiled from scratch)[http://apttools.sourceforge.net/compile-posgen.html] after the patch has been applied.
+The `findEdgeClustersConvex.R` script can use an unmodified version of [posgen](https://apttools.sourceforge.net), however the `findEdgeClusters.R` script requires the bounding box of each cluster in the cluster statistics file produced by the cluster search step. A source code patch is available to add this functionality to posgen (`posgenBoundingBoxPatch.txt`). This will require the program to be [compiled from scratch](http://apttools.sourceforge.net/compile-posgen.html) after the patch has been applied.
 Then you should be able to run any of the `edgeParticleSimulator` scripts which generate a simulated dataset, cluster search and then find edge clusters. Or you can use the `findEdgeClustersConvex` function on your own data to identify the edge clusters. See the `findEdgeClustersConvex` file for usage.
 
  
