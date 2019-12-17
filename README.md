@@ -6,6 +6,7 @@ Edge detection of clusters for point-cloud data using an alpha-hull. Scripts wri
   library("tidyverse")
   library("geometry")
   library("alphashape3d")
+  library("spatstat")
 ```
 
 # Installation
