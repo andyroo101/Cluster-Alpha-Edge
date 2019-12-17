@@ -29,11 +29,13 @@ findEdgeClusters <- function (posFileName,
                               AtomicDensity = 86, 
                               DetectionEfficiency = 0.37,
                               SamplingFraction = 0.005,
+                              AlphaValue = 12,
                               NNDMultiplier = 2) {
   
   library("tidyverse")
   library("geometry")
   library("alphashape3d")
+  require("spatstat")
   
   # get time for timing execution
   StartTime <- Sys.time()
@@ -75,7 +77,7 @@ findEdgeClusters <- function (posFileName,
         ypos = Center_y..nm..Ranged,
         zpos = Center_z..nm..Ranged
       ) %>%
-      filter(grepl("Cluster", X))
+      filter(grepl("Cluster", cid))
     
   } else {
     ClusterImport <- read_delim(clusterStatsFile,
@@ -93,14 +95,19 @@ findEdgeClusters <- function (posFileName,
   FilterPosFile <- read.pos.sampled(posFileName, SamplingFraction)
   
   #### Parameters For Calculating Alpha Value####
-  AlphaValue <<- NNDMultiplier*round(ceiling(100*(max(nndist(FilterPosFile %>% select(x,y,z), k=1)))),2)/100
-  
-  print(paste0(
-    "Alpha Value: ",
-    AlphaValue,
-    " Sampling fraction: ",
-    SamplingFraction
-  ))
+  if (AlphaValue == 0| missing(AlphaValue)) {
+    AlphaValue <<- NNDMultiplier*round(ceiling(100*(max(nndist(FilterPosFile %>% select(x,y,z), k=1)))),2)/100
+    print(paste0(
+      "Alpha Value: ",
+      NNDMultiplier*round(ceiling(100*(max(nndist(FilterPosFile %>% select(x,y,z), k=1)))),2)/100))
+  }else{
+    print(paste0(
+      "Alpha Value: ",
+      AlphaValue,
+      " Sampling fraction: ",
+      SamplingFraction
+    ))
+  }
   
   
   #### Find extreme co-ords for each cluster (modelling as cuboids) ####

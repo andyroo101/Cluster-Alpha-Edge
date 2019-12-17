@@ -23,25 +23,25 @@
 #   DetectionEfficiency = Detection efficiency of leap used
 #   SamplingFraction = How much one would like to sample the POS file by
 #   Returns a list of which cluster IDs are deemed to be on the edge of the data
+source("read.pos.R")
+source("read.pos.sampled.R")
+
 findEdgeClustersConvex <- function (posFileName, 
                                     clusterStatsFile,
                                     clusterIndexPosFile, 
                                     AtomicDensity = 86, 
                                     DetectionEfficiency = 0.37,
                                     SamplingFraction = 0.005,
+                                    AlphaValue = 12,
                                     NNDMultiplier = 2) {
   
   library("tidyverse")
   library("geometry")
   library("alphashape3d")
+  require("spatstat")
   
   # get time for timing execution
   StartTime <- Sys.time()
-  
-  #### Parameters For Calculating Alpha Value####
-  if (AlphaValue == 0) {
-    AlphaValue <- 1 / (AtomicDensity * DetectionEfficiency * SamplingFraction)
-  }
   
   #### Read the cluster statistics file ####
   # TODO: the stats file isn't strictly necessary because the info can be calculated from the index pos file
@@ -82,7 +82,7 @@ findEdgeClustersConvex <- function (posFileName,
         ypos = Center_y..nm..Ranged,
         zpos = Center_z..nm..Ranged
       ) %>%
-      filter(grepl("Cluster", X))
+      filter(grepl("Cluster", cid))
     
   } else {
     ClusterImport <- read_delim(clusterStatsFile,
@@ -114,16 +114,20 @@ findEdgeClustersConvex <- function (posFileName,
   #### Load filtered pos file to improve speed ####
   FilterPosFile <- read.pos.sampled(posFileName, SamplingFraction)
   
-  
   #### Parameters For Calculating Alpha Value####
-  AlphaValue <<- NNDMultiplier*round(ceiling(100*(max(nndist(FilterPosFile %>% select(x,y,z), k=1)))),2)/100
-  
-  print(paste0(
+  if (AlphaValue == 0| missing(AlphaValue)) {
+    AlphaValue <<- NNDMultiplier*round(ceiling(100*(max(nndist(FilterPosFile %>% select(x,y,z), k=1)))),2)/100
+    print(paste0(
+      "Alpha Value: ",
+      NNDMultiplier*round(ceiling(100*(max(nndist(FilterPosFile %>% select(x,y,z), k=1)))),2)/100))
+  }else{
+    print(paste0(
     "Alpha Value: ",
     AlphaValue,
     " Sampling fraction: ",
     SamplingFraction
   ))
+  }
   
   
   #### Find extreme co-ords for each cluster (modelling as cuboids) ####
