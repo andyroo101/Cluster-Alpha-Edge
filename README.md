@@ -1,5 +1,5 @@
 # Cluster Alpha Edge
-Edge detection of clusters for point-cloud data using an alpha-hull. Scripts written in R are used for the simulation of test data (see `edgeParticleSimulator.R` ) and finding the edge clusters from the associated cluster pos file results (see `findEdgeClustersConvex.R`). The "full" pos file, cluster data or statistics (including the data required to get the cluster bounding box) as well as some settings (atomic density, detection efficiency and sampling fraction).
+Edge detection of clusters for point-cloud data using an alpha-hull. Scripts written in R are used for the simulation of test data (see `edgeParticleSimulator.R` ) and finding the edge clusters from the associated cluster pos file results (see `findEdgeClustersConvex.R`). The "full" pos file, cluster data or statistics (including the data required to get the cluster bounding box) as well as some settings (atomic density, detection efficiency and sampling fraction). The code is based on the [following paper](https://doi.org/10.1016/j.matchar.2019.110078). 
 
 # Required R libraries
 ```
