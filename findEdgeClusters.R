@@ -29,7 +29,7 @@ findEdgeClusters <- function (posFileName,
                               AtomicDensity = 86, 
                               DetectionEfficiency = 0.37,
                               SamplingFraction = 0.005,
-                              AlphaValue = 0) {
+                              NNDMultiplier = 2) {
   
   library("tidyverse")
   library("geometry")
@@ -89,14 +89,11 @@ findEdgeClusters <- function (posFileName,
   
   ClusterImportedData <- ClusterImport
   
-  #### Parameters For Calculating Alpha Value####
-  if (AlphaValue == 0) {
-    AlphaValue <- 1 / (AtomicDensity * DetectionEfficiency * SamplingFraction)
-  }
-  
-  
   #### Load filtered pos file to improve speed ####
   FilterPosFile <- read.pos.sampled(posFileName, SamplingFraction)
+  
+  #### Parameters For Calculating Alpha Value####
+  AlphaValue <<- NNDMultiplier*round(ceiling(100*(max(nndist(FilterPosFile %>% select(x,y,z), k=1)))),2)/100
   
   print(paste0(
     "Alpha Value: ",
